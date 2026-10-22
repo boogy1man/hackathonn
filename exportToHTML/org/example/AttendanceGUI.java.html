@@ -1,0 +1,231 @@
+<html>
+<head>
+<title>AttendanceGUI.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AttendanceGUI.java</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">package </span><span class="s0">org</span><span class="s2">.</span><span class="s0">example</span><span class="s2">;</span>
+
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">swing</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">awt</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">sql</span><span class="s2">.</span><span class="s0">SQLException</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">util</span><span class="s2">.</span><span class="s0">ArrayList</span><span class="s2">;</span>
+
+<span class="s1">public class </span><span class="s0">AttendanceGUI </span><span class="s1">extends </span><span class="s0">JPanel </span><span class="s2">{</span>
+
+    <span class="s0">AttendanceManager manager </span><span class="s2">= </span><span class="s1">new </span><span class="s0">AttendanceManager</span><span class="s2">();</span>
+
+    <span class="s0">JComboBox</span><span class="s2">&lt;</span><span class="s0">String</span><span class="s2">&gt; </span><span class="s0">subjectBox </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JComboBox</span><span class="s2">&lt;&gt;();</span>
+
+    <span class="s0">JTextField newSubject </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">10</span><span class="s2">);</span>
+    <span class="s0">JTextField attended </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">5</span><span class="s2">);</span>
+    <span class="s0">JTextField total </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">5</span><span class="s2">);</span>
+
+    <span class="s0">JPanel subjectPanel </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">();</span>
+
+    <span class="s1">public </span><span class="s0">AttendanceGUI</span><span class="s2">() {</span>
+
+        <span class="s0">setLayout</span><span class="s2">(</span><span class="s1">new </span><span class="s0">BorderLayout</span><span class="s2">(</span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">));</span>
+        <span class="s0">setBorder</span><span class="s2">(</span><span class="s0">BorderFactory</span><span class="s2">.</span><span class="s0">createEmptyBorder</span><span class="s2">(</span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">));</span>
+
+        <span class="s0">JLabel title </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Attendance Tracker&quot;</span><span class="s2">, </span><span class="s0">JLabel</span><span class="s2">.</span><span class="s0">CENTER</span><span class="s2">);</span>
+        <span class="s0">add</span><span class="s2">(</span><span class="s0">title</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">NORTH</span><span class="s2">);</span>
+
+        <span class="s0">subjectPanel</span><span class="s2">.</span><span class="s0">setLayout</span><span class="s2">(</span><span class="s1">new </span><span class="s0">BoxLayout</span><span class="s2">(</span><span class="s0">subjectPanel</span><span class="s2">, </span><span class="s0">BoxLayout</span><span class="s2">.</span><span class="s0">Y_AXIS</span><span class="s2">));</span>
+        <span class="s0">add</span><span class="s2">(</span><span class="s0">subjectPanel</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">CENTER</span><span class="s2">);</span>
+
+        <span class="s0">JPanel controls </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">GridLayout</span><span class="s2">(</span><span class="s3">3</span><span class="s2">, </span><span class="s3">1</span><span class="s2">, </span><span class="s3">5</span><span class="s2">, </span><span class="s3">5</span><span class="s2">));</span>
+
+        <span class="s0">JPanel addPanel </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">FlowLayout</span><span class="s2">(</span><span class="s0">FlowLayout</span><span class="s2">.</span><span class="s0">LEFT</span><span class="s2">));</span>
+        <span class="s0">addPanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;New Subject:&quot;</span><span class="s2">));</span>
+        <span class="s0">addPanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">newSubject</span><span class="s2">);</span>
+
+        <span class="s0">JButton addButton </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JButton</span><span class="s2">(</span><span class="s4">&quot;Add Subject&quot;</span><span class="s2">);</span>
+        <span class="s0">addPanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">addButton</span><span class="s2">);</span>
+
+        <span class="s0">JPanel updatePanel </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">FlowLayout</span><span class="s2">(</span><span class="s0">FlowLayout</span><span class="s2">.</span><span class="s0">LEFT</span><span class="s2">));</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Subject:&quot;</span><span class="s2">));</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">subjectBox</span><span class="s2">);</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Attended:&quot;</span><span class="s2">));</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">attended</span><span class="s2">);</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Total:&quot;</span><span class="s2">));</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">total</span><span class="s2">);</span>
+
+        <span class="s0">JButton updateButton </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JButton</span><span class="s2">(</span><span class="s4">&quot;Update&quot;</span><span class="s2">);</span>
+        <span class="s0">updatePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">updateButton</span><span class="s2">);</span>
+
+        <span class="s0">JPanel deletePanel </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">FlowLayout</span><span class="s2">(</span><span class="s0">FlowLayout</span><span class="s2">.</span><span class="s0">LEFT</span><span class="s2">));</span>
+        <span class="s0">JButton deleteButton </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JButton</span><span class="s2">(</span><span class="s4">&quot;Delete Selected Subject&quot;</span><span class="s2">);</span>
+        <span class="s0">deletePanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">deleteButton</span><span class="s2">);</span>
+
+        <span class="s0">controls</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">addPanel</span><span class="s2">);</span>
+        <span class="s0">controls</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">updatePanel</span><span class="s2">);</span>
+        <span class="s0">controls</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">deletePanel</span><span class="s2">);</span>
+
+        <span class="s0">add</span><span class="s2">(</span><span class="s0">controls</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">SOUTH</span><span class="s2">);</span>
+
+        <span class="s0">addButton</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; addSubject</span><span class="s2">());</span>
+        <span class="s0">updateButton</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; updateAttendance</span><span class="s2">());</span>
+        <span class="s0">deleteButton</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; deleteSubject</span><span class="s2">());</span>
+
+        <span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; showAttendance</span><span class="s2">());</span>
+
+        <span class="s0">loadSubjects</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">loadSubjects</span><span class="s2">() {</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">ArrayList</span><span class="s2">&lt;</span><span class="s0">Subject</span><span class="s2">&gt; </span><span class="s0">list </span><span class="s2">= </span><span class="s0">manager</span><span class="s2">.</span><span class="s0">getSubjects</span><span class="s2">();</span>
+
+            <span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">removeAllItems</span><span class="s2">();</span>
+            <span class="s0">subjectPanel</span><span class="s2">.</span><span class="s0">removeAll</span><span class="s2">();</span>
+
+            <span class="s1">for </span><span class="s2">(</span><span class="s0">Subject s </span><span class="s2">: </span><span class="s0">list</span><span class="s2">) {</span>
+
+                <span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">addItem</span><span class="s2">(</span><span class="s0">s</span><span class="s2">.</span><span class="s0">getName</span><span class="s2">());</span>
+
+                <span class="s1">int </span><span class="s0">percentage </span><span class="s2">= </span><span class="s0">s</span><span class="s2">.</span><span class="s0">getPercentage</span><span class="s2">();</span>
+
+                <span class="s0">JPanel row </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">FlowLayout</span><span class="s2">(</span><span class="s0">FlowLayout</span><span class="s2">.</span><span class="s0">LEFT</span><span class="s2">));</span>
+                <span class="s0">row</span><span class="s2">.</span><span class="s0">setMaximumSize</span><span class="s2">(</span><span class="s1">new </span><span class="s0">Dimension</span><span class="s2">(</span><span class="s3">700</span><span class="s2">, </span><span class="s3">35</span><span class="s2">));</span>
+
+                <span class="s0">row</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s0">s</span><span class="s2">.</span><span class="s0">getName</span><span class="s2">()));</span>
+                <span class="s0">row</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Attendance: &quot; </span><span class="s2">+ </span><span class="s0">percentage </span><span class="s2">+ </span><span class="s4">&quot;%&quot;</span><span class="s2">));</span>
+                <span class="s0">row</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span>
+                        <span class="s4">&quot;(&quot; </span><span class="s2">+ </span><span class="s0">s</span><span class="s2">.</span><span class="s0">getAttended</span><span class="s2">() + </span><span class="s4">&quot;/&quot; </span><span class="s2">+ </span><span class="s0">s</span><span class="s2">.</span><span class="s0">getTotal</span><span class="s2">() + </span><span class="s4">&quot;)&quot;</span><span class="s2">));</span>
+
+                <span class="s0">subjectPanel</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">row</span><span class="s2">);</span>
+            <span class="s2">}</span>
+
+            <span class="s0">subjectPanel</span><span class="s2">.</span><span class="s0">revalidate</span><span class="s2">();</span>
+            <span class="s0">subjectPanel</span><span class="s2">.</span><span class="s0">repaint</span><span class="s2">();</span>
+
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">getItemCount</span><span class="s2">() &gt; </span><span class="s3">0</span><span class="s2">) {</span>
+                <span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">setSelectedIndex</span><span class="s2">(</span><span class="s3">0</span><span class="s2">);</span>
+                <span class="s0">showAttendance</span><span class="s2">();</span>
+            <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                <span class="s0">attended</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+                <span class="s0">total</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">showAttendance</span><span class="s2">() {</span>
+
+        <span class="s0">String name </span><span class="s2">= (</span><span class="s0">String</span><span class="s2">) </span><span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">name </span><span class="s2">== </span><span class="s1">null</span><span class="s2">) {</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">ArrayList</span><span class="s2">&lt;</span><span class="s0">Subject</span><span class="s2">&gt; </span><span class="s0">list </span><span class="s2">= </span><span class="s0">manager</span><span class="s2">.</span><span class="s0">getSubjects</span><span class="s2">();</span>
+
+            <span class="s1">for </span><span class="s2">(</span><span class="s0">Subject s </span><span class="s2">: </span><span class="s0">list</span><span class="s2">) {</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">s</span><span class="s2">.</span><span class="s0">getName</span><span class="s2">().</span><span class="s0">equals</span><span class="s2">(</span><span class="s0">name</span><span class="s2">)) {</span>
+                    <span class="s0">attended</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot; </span><span class="s2">+ </span><span class="s0">s</span><span class="s2">.</span><span class="s0">getAttended</span><span class="s2">());</span>
+                    <span class="s0">total</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot; </span><span class="s2">+ </span><span class="s0">s</span><span class="s2">.</span><span class="s0">getTotal</span><span class="s2">());</span>
+                    <span class="s1">break</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">addSubject</span><span class="s2">() {</span>
+
+        <span class="s0">String name </span><span class="s2">= </span><span class="s0">newSubject</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">();</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">name</span><span class="s2">.</span><span class="s0">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Enter subject name&quot;</span><span class="s2">);</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">manager</span><span class="s2">.</span><span class="s0">addSubject</span><span class="s2">(</span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">newSubject</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+            <span class="s0">loadSubjects</span><span class="s2">();</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span>
+                    <span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Could not add subject: &quot; </span><span class="s2">+ </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">updateAttendance</span><span class="s2">() {</span>
+
+        <span class="s0">String name </span><span class="s2">= (</span><span class="s0">String</span><span class="s2">) </span><span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">name </span><span class="s2">== </span><span class="s1">null</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Select a subject&quot;</span><span class="s2">);</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s1">int </span><span class="s0">a </span><span class="s2">= </span><span class="s0">Integer</span><span class="s2">.</span><span class="s0">parseInt</span><span class="s2">(</span><span class="s0">attended</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">());</span>
+            <span class="s1">int </span><span class="s0">t </span><span class="s2">= </span><span class="s0">Integer</span><span class="s2">.</span><span class="s0">parseInt</span><span class="s2">(</span><span class="s0">total</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">());</span>
+
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">a </span><span class="s2">&lt; </span><span class="s3">0 </span><span class="s2">|| </span><span class="s0">t </span><span class="s2">&lt; </span><span class="s3">0 </span><span class="s2">|| </span><span class="s0">a </span><span class="s2">&gt; </span><span class="s0">t</span><span class="s2">) {</span>
+                <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span>
+                        <span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Enter valid attendance values&quot;</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">manager</span><span class="s2">.</span><span class="s0">updateAttendance</span><span class="s2">(</span><span class="s0">name</span><span class="s2">, </span><span class="s0">a</span><span class="s2">, </span><span class="s0">t</span><span class="s2">);</span>
+            <span class="s0">loadSubjects</span><span class="s2">();</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">NumberFormatException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Enter whole numbers&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">deleteSubject</span><span class="s2">() {</span>
+
+        <span class="s0">String name </span><span class="s2">= (</span><span class="s0">String</span><span class="s2">) </span><span class="s0">subjectBox</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">name </span><span class="s2">== </span><span class="s1">null</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Select a subject&quot;</span><span class="s2">);</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">int </span><span class="s0">answer </span><span class="s2">= </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showConfirmDialog</span><span class="s2">(</span>
+                <span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Delete &quot; </span><span class="s2">+ </span><span class="s0">name </span><span class="s2">+ </span><span class="s4">&quot;?&quot;</span><span class="s2">,</span>
+                <span class="s4">&quot;Confirm&quot;</span><span class="s2">, </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">YES_NO_OPTION</span><span class="s2">);</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">answer </span><span class="s2">!= </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">YES_OPTION</span><span class="s2">) {</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">manager</span><span class="s2">.</span><span class="s0">deleteSubject</span><span class="s2">(</span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">loadSubjects</span><span class="s2">();</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

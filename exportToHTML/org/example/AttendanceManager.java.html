@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>AttendanceManager.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+AttendanceManager.java</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">package </span><span class="s0">org</span><span class="s2">.</span><span class="s0">example</span><span class="s2">;</span>
+
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">sql</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">util</span><span class="s2">.</span><span class="s0">ArrayList</span><span class="s2">;</span>
+
+<span class="s1">public class </span><span class="s0">AttendanceManager </span><span class="s2">{</span>
+
+    <span class="s1">public </span><span class="s0">ArrayList</span><span class="s2">&lt;</span><span class="s0">Subject</span><span class="s2">&gt; </span><span class="s0">getSubjects</span><span class="s2">() </span><span class="s1">throws </span><span class="s0">SQLException </span><span class="s2">{</span>
+
+        <span class="s0">ArrayList</span><span class="s2">&lt;</span><span class="s0">Subject</span><span class="s2">&gt; </span><span class="s0">subjects </span><span class="s2">= </span><span class="s1">new </span><span class="s0">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+        <span class="s0">String sql </span><span class="s2">= </span><span class="s3">&quot;SELECT * FROM subjects ORDER BY subject_id&quot;</span><span class="s2">;</span>
+
+        <span class="s1">try </span><span class="s2">(</span><span class="s0">Connection con </span><span class="s2">= </span><span class="s0">DBConnection</span><span class="s2">.</span><span class="s0">getConnection</span><span class="s2">();</span>
+             <span class="s0">PreparedStatement ps </span><span class="s2">= </span><span class="s0">con</span><span class="s2">.</span><span class="s0">prepareStatement</span><span class="s2">(</span><span class="s0">sql</span><span class="s2">);</span>
+             <span class="s0">ResultSet rs </span><span class="s2">= </span><span class="s0">ps</span><span class="s2">.</span><span class="s0">executeQuery</span><span class="s2">()) {</span>
+
+            <span class="s1">while </span><span class="s2">(</span><span class="s0">rs</span><span class="s2">.</span><span class="s0">next</span><span class="s2">()) {</span>
+                <span class="s0">Subject subject </span><span class="s2">= </span><span class="s1">new </span><span class="s0">Subject</span><span class="s2">(</span>
+                        <span class="s0">rs</span><span class="s2">.</span><span class="s0">getString</span><span class="s2">(</span><span class="s3">&quot;subject_name&quot;</span><span class="s2">),</span>
+                        <span class="s0">rs</span><span class="s2">.</span><span class="s0">getInt</span><span class="s2">(</span><span class="s3">&quot;attended_classes&quot;</span><span class="s2">),</span>
+                        <span class="s0">rs</span><span class="s2">.</span><span class="s0">getInt</span><span class="s2">(</span><span class="s3">&quot;total_classes&quot;</span><span class="s2">)</span>
+                <span class="s2">);</span>
+
+                <span class="s0">subjects</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">subject</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s1">return </span><span class="s0">subjects</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">public void </span><span class="s0">addSubject</span><span class="s2">(</span><span class="s0">String name</span><span class="s2">) </span><span class="s1">throws </span><span class="s0">SQLException </span><span class="s2">{</span>
+
+        <span class="s0">String sql </span><span class="s2">= </span><span class="s3">&quot;INSERT INTO subjects &quot;</span>
+                <span class="s2">+ </span><span class="s3">&quot;(subject_name, attended_classes, total_classes) &quot;</span>
+                <span class="s2">+ </span><span class="s3">&quot;VALUES (?, 0, 0)&quot;</span><span class="s2">;</span>
+
+        <span class="s1">try </span><span class="s2">(</span><span class="s0">Connection con </span><span class="s2">= </span><span class="s0">DBConnection</span><span class="s2">.</span><span class="s0">getConnection</span><span class="s2">();</span>
+             <span class="s0">PreparedStatement ps </span><span class="s2">= </span><span class="s0">con</span><span class="s2">.</span><span class="s0">prepareStatement</span><span class="s2">(</span><span class="s0">sql</span><span class="s2">)) {</span>
+
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">setString</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">executeUpdate</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">public void </span><span class="s0">deleteSubject</span><span class="s2">(</span><span class="s0">String name</span><span class="s2">) </span><span class="s1">throws </span><span class="s0">SQLException </span><span class="s2">{</span>
+
+        <span class="s0">String sql </span><span class="s2">= </span><span class="s3">&quot;DELETE FROM subjects WHERE subject_name = ?&quot;</span><span class="s2">;</span>
+
+        <span class="s1">try </span><span class="s2">(</span><span class="s0">Connection con </span><span class="s2">= </span><span class="s0">DBConnection</span><span class="s2">.</span><span class="s0">getConnection</span><span class="s2">();</span>
+             <span class="s0">PreparedStatement ps </span><span class="s2">= </span><span class="s0">con</span><span class="s2">.</span><span class="s0">prepareStatement</span><span class="s2">(</span><span class="s0">sql</span><span class="s2">)) {</span>
+
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">setString</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">executeUpdate</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">public void </span><span class="s0">updateAttendance</span><span class="s2">(</span>
+            <span class="s0">String name</span><span class="s2">, </span><span class="s1">int </span><span class="s0">attended</span><span class="s2">, </span><span class="s1">int </span><span class="s0">total</span><span class="s2">) </span><span class="s1">throws </span><span class="s0">SQLException </span><span class="s2">{</span>
+
+        <span class="s0">String sql </span><span class="s2">= </span><span class="s3">&quot;UPDATE subjects SET attended_classes = ?, &quot;</span>
+                <span class="s2">+ </span><span class="s3">&quot;total_classes = ? WHERE subject_name = ?&quot;</span><span class="s2">;</span>
+
+        <span class="s1">try </span><span class="s2">(</span><span class="s0">Connection con </span><span class="s2">= </span><span class="s0">DBConnection</span><span class="s2">.</span><span class="s0">getConnection</span><span class="s2">();</span>
+             <span class="s0">PreparedStatement ps </span><span class="s2">= </span><span class="s0">con</span><span class="s2">.</span><span class="s0">prepareStatement</span><span class="s2">(</span><span class="s0">sql</span><span class="s2">)) {</span>
+
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">setInt</span><span class="s2">(</span><span class="s4">1</span><span class="s2">, </span><span class="s0">attended</span><span class="s2">);</span>
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">setInt</span><span class="s2">(</span><span class="s4">2</span><span class="s2">, </span><span class="s0">total</span><span class="s2">);</span>
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">setString</span><span class="s2">(</span><span class="s4">3</span><span class="s2">, </span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">ps</span><span class="s2">.</span><span class="s0">executeUpdate</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

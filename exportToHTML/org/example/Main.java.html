@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org</span><span class="s2">.</span><span class="s1">example</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+
+<span class="s0">public class </span><span class="s1">Main </span><span class="s0">extends </span><span class="s1">JFrame </span><span class="s2">{</span>
+
+    <span class="s0">public </span><span class="s1">Main</span><span class="s2">() {</span>
+
+        <span class="s1">setTitle</span><span class="s2">(</span><span class="s3">&quot;Academic Tracker&quot;</span><span class="s2">);</span>
+        <span class="s1">setSize</span><span class="s2">(</span><span class="s4">1000</span><span class="s2">, </span><span class="s4">600</span><span class="s2">);</span>
+        <span class="s1">setDefaultCloseOperation</span><span class="s2">(</span><span class="s1">JFrame</span><span class="s2">.</span><span class="s1">EXIT_ON_CLOSE</span><span class="s2">);</span>
+        <span class="s1">setLocationRelativeTo</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
+
+        <span class="s1">CardLayout layout </span><span class="s2">= </span><span class="s0">new </span><span class="s1">CardLayout</span><span class="s2">();</span>
+        <span class="s1">JPanel cards </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JPanel</span><span class="s2">(</span><span class="s1">layout</span><span class="s2">);</span>
+
+        <span class="s1">cards</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">AttendanceGUI</span><span class="s2">(), </span><span class="s3">&quot;attendance&quot;</span><span class="s2">);</span>
+        <span class="s1">cards</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">GradeGUI</span><span class="s2">(), </span><span class="s3">&quot;grades&quot;</span><span class="s2">);</span>
+        <span class="s1">cards</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">ParentGUI</span><span class="s2">(), </span><span class="s3">&quot;parent&quot;</span><span class="s2">);</span>
+
+        <span class="s1">JButton attendanceButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JButton</span><span class="s2">(</span><span class="s3">&quot;Attendance&quot;</span><span class="s2">);</span>
+        <span class="s1">JButton gradeButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JButton</span><span class="s2">(</span><span class="s3">&quot;Grade Card&quot;</span><span class="s2">);</span>
+        <span class="s1">JButton parentButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JButton</span><span class="s2">(</span><span class="s3">&quot;Parent Module&quot;</span><span class="s2">);</span>
+
+        <span class="s1">attendanceButton</span><span class="s2">.</span><span class="s1">addActionListener</span><span class="s2">(</span>
+                <span class="s1">e -&gt; layout</span><span class="s2">.</span><span class="s1">show</span><span class="s2">(</span><span class="s1">cards</span><span class="s2">, </span><span class="s3">&quot;attendance&quot;</span><span class="s2">));</span>
+
+        <span class="s1">gradeButton</span><span class="s2">.</span><span class="s1">addActionListener</span><span class="s2">(</span>
+                <span class="s1">e -&gt; layout</span><span class="s2">.</span><span class="s1">show</span><span class="s2">(</span><span class="s1">cards</span><span class="s2">, </span><span class="s3">&quot;grades&quot;</span><span class="s2">));</span>
+
+        <span class="s1">parentButton</span><span class="s2">.</span><span class="s1">addActionListener</span><span class="s2">(</span>
+                <span class="s1">e -&gt; layout</span><span class="s2">.</span><span class="s1">show</span><span class="s2">(</span><span class="s1">cards</span><span class="s2">, </span><span class="s3">&quot;parent&quot;</span><span class="s2">));</span>
+
+        <span class="s1">JPanel buttons </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JPanel</span><span class="s2">();</span>
+        <span class="s1">buttons</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">attendanceButton</span><span class="s2">);</span>
+        <span class="s1">buttons</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">gradeButton</span><span class="s2">);</span>
+        <span class="s1">buttons</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">parentButton</span><span class="s2">);</span>
+
+        <span class="s1">add</span><span class="s2">(</span><span class="s1">buttons</span><span class="s2">, </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">NORTH</span><span class="s2">);</span>
+        <span class="s1">add</span><span class="s2">(</span><span class="s1">cards</span><span class="s2">, </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">CENTER</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static void </span><span class="s1">main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) {</span>
+
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">DataBase</span><span class="s2">.</span><span class="s1">initialize</span><span class="s2">();</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+            <span class="s1">JOptionPane</span><span class="s2">.</span><span class="s1">showMessageDialog</span><span class="s2">(</span>
+                    <span class="s0">null</span><span class="s2">,</span>
+                    <span class="s3">&quot;Database error: &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">()</span>
+            <span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">SwingUtilities</span><span class="s2">.</span><span class="s1">invokeLater</span><span class="s2">(() </span><span class="s1">-&gt; </span><span class="s2">{</span>
+            <span class="s0">new </span><span class="s1">Main</span><span class="s2">().</span><span class="s1">setVisible</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);</span>
+        <span class="s2">});</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

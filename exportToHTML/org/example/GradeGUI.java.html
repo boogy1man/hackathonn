@@ -1,0 +1,177 @@
+<html>
+<head>
+<title>GradeGUI.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+GradeGUI.java</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">package </span><span class="s0">org</span><span class="s2">.</span><span class="s0">example</span><span class="s2">;</span>
+
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">swing</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">swing</span><span class="s2">.</span><span class="s0">table</span><span class="s2">.</span><span class="s0">DefaultTableModel</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">awt</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">sql</span><span class="s2">.</span><span class="s0">SQLException</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">util</span><span class="s2">.</span><span class="s0">ArrayList</span><span class="s2">;</span>
+
+<span class="s1">public class </span><span class="s0">GradeGUI </span><span class="s1">extends </span><span class="s0">JPanel </span><span class="s2">{</span>
+
+    <span class="s0">GradeManager manager </span><span class="s2">= </span><span class="s1">new </span><span class="s0">GradeManager</span><span class="s2">();</span>
+
+    <span class="s0">JComboBox</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">semester </span><span class="s2">=</span>
+            <span class="s1">new </span><span class="s0">JComboBox</span><span class="s2">&lt;&gt;(</span><span class="s1">new </span><span class="s0">Integer</span><span class="s2">[]{</span><span class="s3">1</span><span class="s2">, </span><span class="s3">2</span><span class="s2">, </span><span class="s3">3</span><span class="s2">, </span><span class="s3">4</span><span class="s2">, </span><span class="s3">5</span><span class="s2">, </span><span class="s3">6</span><span class="s2">, </span><span class="s3">7</span><span class="s2">, </span><span class="s3">8</span><span class="s2">});</span>
+
+    <span class="s0">JTextField subject </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">10</span><span class="s2">);</span>
+    <span class="s0">JTextField credits </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">5</span><span class="s2">);</span>
+    <span class="s0">JTextField marks </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTextField</span><span class="s2">(</span><span class="s3">5</span><span class="s2">);</span>
+
+    <span class="s0">DefaultTableModel model </span><span class="s2">= </span><span class="s1">new </span><span class="s0">DefaultTableModel</span><span class="s2">(</span>
+            <span class="s1">new </span><span class="s0">String</span><span class="s2">[]{</span><span class="s4">&quot;Subject&quot;</span><span class="s2">, </span><span class="s4">&quot;Credits&quot;</span><span class="s2">, </span><span class="s4">&quot;Marks&quot;</span><span class="s2">,</span>
+                    <span class="s4">&quot;Grade&quot;</span><span class="s2">, </span><span class="s4">&quot;Grade Point&quot;</span><span class="s2">}, </span><span class="s3">0</span><span class="s2">) {</span>
+
+        <span class="s1">public boolean </span><span class="s0">isCellEditable</span><span class="s2">(</span><span class="s1">int </span><span class="s0">row</span><span class="s2">, </span><span class="s1">int </span><span class="s0">column</span><span class="s2">) {</span>
+            <span class="s1">return false</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+    <span class="s0">JTable table </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JTable</span><span class="s2">(</span><span class="s0">model</span><span class="s2">);</span>
+    <span class="s0">JLabel sgpa </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;SGPA: 0.00&quot;</span><span class="s2">);</span>
+
+    <span class="s1">public </span><span class="s0">GradeGUI</span><span class="s2">() {</span>
+
+        <span class="s0">setLayout</span><span class="s2">(</span><span class="s1">new </span><span class="s0">BorderLayout</span><span class="s2">(</span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">));</span>
+        <span class="s0">setBorder</span><span class="s2">(</span><span class="s0">BorderFactory</span><span class="s2">.</span><span class="s0">createEmptyBorder</span><span class="s2">(</span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">10</span><span class="s2">));</span>
+
+        <span class="s0">JLabel title </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Grade Card&quot;</span><span class="s2">, </span><span class="s0">JLabel</span><span class="s2">.</span><span class="s0">CENTER</span><span class="s2">);</span>
+
+        <span class="s0">JPanel input </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">FlowLayout</span><span class="s2">(</span><span class="s0">FlowLayout</span><span class="s2">.</span><span class="s0">LEFT</span><span class="s2">));</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">setBorder</span><span class="s2">(</span><span class="s0">BorderFactory</span><span class="s2">.</span><span class="s0">createTitledBorder</span><span class="s2">(</span><span class="s4">&quot;Enter Grade&quot;</span><span class="s2">));</span>
+
+        <span class="s0">JButton addButton </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JButton</span><span class="s2">(</span><span class="s4">&quot;Add / Update&quot;</span><span class="s2">);</span>
+        <span class="s0">JButton deleteButton </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JButton</span><span class="s2">(</span><span class="s4">&quot;Delete Selected&quot;</span><span class="s2">);</span>
+
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Semester:&quot;</span><span class="s2">));</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">semester</span><span class="s2">);</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Subject:&quot;</span><span class="s2">));</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">subject</span><span class="s2">);</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Credits:&quot;</span><span class="s2">));</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">credits</span><span class="s2">);</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JLabel</span><span class="s2">(</span><span class="s4">&quot;Marks:&quot;</span><span class="s2">));</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">marks</span><span class="s2">);</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">addButton</span><span class="s2">);</span>
+        <span class="s0">input</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">deleteButton</span><span class="s2">);</span>
+
+        <span class="s0">JPanel top </span><span class="s2">= </span><span class="s1">new </span><span class="s0">JPanel</span><span class="s2">(</span><span class="s1">new </span><span class="s0">BorderLayout</span><span class="s2">());</span>
+        <span class="s0">top</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">title</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">NORTH</span><span class="s2">);</span>
+        <span class="s0">top</span><span class="s2">.</span><span class="s0">add</span><span class="s2">(</span><span class="s0">input</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">CENTER</span><span class="s2">);</span>
+
+        <span class="s0">add</span><span class="s2">(</span><span class="s0">top</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">NORTH</span><span class="s2">);</span>
+        <span class="s0">add</span><span class="s2">(</span><span class="s1">new </span><span class="s0">JScrollPane</span><span class="s2">(</span><span class="s0">table</span><span class="s2">), </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">CENTER</span><span class="s2">);</span>
+        <span class="s0">add</span><span class="s2">(</span><span class="s0">sgpa</span><span class="s2">, </span><span class="s0">BorderLayout</span><span class="s2">.</span><span class="s0">SOUTH</span><span class="s2">);</span>
+
+        <span class="s0">addButton</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; addGrade</span><span class="s2">());</span>
+        <span class="s0">deleteButton</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; deleteGrade</span><span class="s2">());</span>
+        <span class="s0">semester</span><span class="s2">.</span><span class="s0">addActionListener</span><span class="s2">(</span><span class="s0">e -&gt; loadGrades</span><span class="s2">());</span>
+
+        <span class="s0">loadGrades</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">addGrade</span><span class="s2">() {</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s1">int </span><span class="s0">sem </span><span class="s2">= (</span><span class="s0">Integer</span><span class="s2">) </span><span class="s0">semester</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+            <span class="s0">String name </span><span class="s2">= </span><span class="s0">subject</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">();</span>
+            <span class="s1">double </span><span class="s0">c </span><span class="s2">= </span><span class="s0">Double</span><span class="s2">.</span><span class="s0">parseDouble</span><span class="s2">(</span><span class="s0">credits</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">());</span>
+            <span class="s1">double </span><span class="s0">m </span><span class="s2">= </span><span class="s0">Double</span><span class="s2">.</span><span class="s0">parseDouble</span><span class="s2">(</span><span class="s0">marks</span><span class="s2">.</span><span class="s0">getText</span><span class="s2">().</span><span class="s0">trim</span><span class="s2">());</span>
+
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">name</span><span class="s2">.</span><span class="s0">isEmpty</span><span class="s2">() || </span><span class="s0">c </span><span class="s2">&lt;= </span><span class="s3">0 </span><span class="s2">|| </span><span class="s0">m </span><span class="s2">&lt; </span><span class="s3">0 </span><span class="s2">|| </span><span class="s0">m </span><span class="s2">&gt; </span><span class="s3">100</span><span class="s2">) {</span>
+                <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Invalid values&quot;</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s0">Grade g </span><span class="s2">= </span><span class="s1">new </span><span class="s0">Grade</span><span class="s2">(</span><span class="s0">sem</span><span class="s2">, </span><span class="s0">name</span><span class="s2">, </span><span class="s0">c</span><span class="s2">, </span><span class="s0">m</span><span class="s2">);</span>
+            <span class="s0">manager</span><span class="s2">.</span><span class="s0">saveGrade</span><span class="s2">(</span><span class="s0">g</span><span class="s2">);</span>
+
+            <span class="s0">subject</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+            <span class="s0">credits</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+            <span class="s0">marks</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s4">&quot;&quot;</span><span class="s2">);</span>
+
+            <span class="s0">loadGrades</span><span class="s2">();</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">NumberFormatException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Enter valid numbers&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">loadGrades</span><span class="s2">() {</span>
+
+        <span class="s0">model</span><span class="s2">.</span><span class="s0">setRowCount</span><span class="s2">(</span><span class="s3">0</span><span class="s2">);</span>
+
+        <span class="s1">int </span><span class="s0">sem </span><span class="s2">= (</span><span class="s0">Integer</span><span class="s2">) </span><span class="s0">semester</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">ArrayList</span><span class="s2">&lt;</span><span class="s0">Grade</span><span class="s2">&gt; </span><span class="s0">list </span><span class="s2">= </span><span class="s0">manager</span><span class="s2">.</span><span class="s0">getGrades</span><span class="s2">(</span><span class="s0">sem</span><span class="s2">);</span>
+
+            <span class="s1">for </span><span class="s2">(</span><span class="s0">Grade g </span><span class="s2">: </span><span class="s0">list</span><span class="s2">) {</span>
+                <span class="s0">model</span><span class="s2">.</span><span class="s0">addRow</span><span class="s2">(</span><span class="s1">new </span><span class="s0">Object</span><span class="s2">[]{</span>
+                        <span class="s0">g</span><span class="s2">.</span><span class="s0">getSubject</span><span class="s2">(),</span>
+                        <span class="s0">g</span><span class="s2">.</span><span class="s0">getCredits</span><span class="s2">(),</span>
+                        <span class="s0">g</span><span class="s2">.</span><span class="s0">getMarks</span><span class="s2">(),</span>
+                        <span class="s0">g</span><span class="s2">.</span><span class="s0">getGrade</span><span class="s2">(),</span>
+                        <span class="s0">g</span><span class="s2">.</span><span class="s0">getGradePoint</span><span class="s2">()</span>
+                <span class="s2">});</span>
+            <span class="s2">}</span>
+
+            <span class="s0">sgpa</span><span class="s2">.</span><span class="s0">setText</span><span class="s2">(</span><span class="s0">String</span><span class="s2">.</span><span class="s0">format</span><span class="s2">(</span>
+                    <span class="s4">&quot;SGPA: %.2f&quot;</span><span class="s2">, </span><span class="s0">manager</span><span class="s2">.</span><span class="s0">calculateSGPA</span><span class="s2">(</span><span class="s0">list</span><span class="s2">)));</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s1">void </span><span class="s0">deleteGrade</span><span class="s2">() {</span>
+
+        <span class="s1">int </span><span class="s0">row </span><span class="s2">= </span><span class="s0">table</span><span class="s2">.</span><span class="s0">getSelectedRow</span><span class="s2">();</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">row </span><span class="s2">== -</span><span class="s3">1</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Select a grade&quot;</span><span class="s2">);</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">String name </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">getValueAt</span><span class="s2">(</span><span class="s0">row</span><span class="s2">, </span><span class="s3">0</span><span class="s2">).</span><span class="s0">toString</span><span class="s2">();</span>
+        <span class="s1">int </span><span class="s0">sem </span><span class="s2">= (</span><span class="s0">Integer</span><span class="s2">) </span><span class="s0">semester</span><span class="s2">.</span><span class="s0">getSelectedItem</span><span class="s2">();</span>
+
+        <span class="s1">int </span><span class="s0">answer </span><span class="s2">= </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showConfirmDialog</span><span class="s2">(</span>
+                <span class="s1">this</span><span class="s2">, </span><span class="s4">&quot;Delete &quot; </span><span class="s2">+ </span><span class="s0">name </span><span class="s2">+ </span><span class="s4">&quot;?&quot;</span><span class="s2">,</span>
+                <span class="s4">&quot;Confirm&quot;</span><span class="s2">, </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">YES_NO_OPTION</span><span class="s2">);</span>
+
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">answer </span><span class="s2">!= </span><span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">YES_OPTION</span><span class="s2">) {</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s1">try </span><span class="s2">{</span>
+            <span class="s0">manager</span><span class="s2">.</span><span class="s0">deleteGrade</span><span class="s2">(</span><span class="s0">sem</span><span class="s2">, </span><span class="s0">name</span><span class="s2">);</span>
+            <span class="s0">loadGrades</span><span class="s2">();</span>
+
+        <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">SQLException e</span><span class="s2">) {</span>
+            <span class="s0">JOptionPane</span><span class="s2">.</span><span class="s0">showMessageDialog</span><span class="s2">(</span><span class="s1">this</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

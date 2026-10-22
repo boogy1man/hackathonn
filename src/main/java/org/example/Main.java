@@ -1,4 +1,3 @@
-
 package org.example;
 
 import javax.swing.*;
@@ -9,7 +8,7 @@ public class Main extends JFrame {
     public Main() {
 
         setTitle("Academic Tracker");
-        setSize(900, 550);
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -18,9 +17,11 @@ public class Main extends JFrame {
 
         cards.add(new AttendanceGUI(), "attendance");
         cards.add(new GradeGUI(), "grades");
+        cards.add(new ParentGUI(), "parent");
 
         JButton attendanceButton = new JButton("Attendance");
         JButton gradeButton = new JButton("Grade Card");
+        JButton parentButton = new JButton("Parent Module");
 
         attendanceButton.addActionListener(
                 e -> layout.show(cards, "attendance"));
@@ -28,9 +29,13 @@ public class Main extends JFrame {
         gradeButton.addActionListener(
                 e -> layout.show(cards, "grades"));
 
+        parentButton.addActionListener(
+                e -> layout.show(cards, "parent"));
+
         JPanel buttons = new JPanel();
         buttons.add(attendanceButton);
         buttons.add(gradeButton);
+        buttons.add(parentButton);
 
         add(buttons, BorderLayout.NORTH);
         add(cards, BorderLayout.CENTER);

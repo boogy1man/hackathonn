@@ -1,0 +1,134 @@
+<html>
+<head>
+<title>ParentGUI.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ParentGUI.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">org</span><span class="s2">.</span><span class="s1">example</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">swing</span><span class="s2">.</span><span class="s1">table</span><span class="s2">.</span><span class="s1">DefaultTableModel</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">awt</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">sql</span><span class="s2">.</span><span class="s1">SQLException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">ParentGUI </span><span class="s0">extends </span><span class="s1">JPanel </span><span class="s2">{</span>
+
+    <span class="s1">AttendanceManager attendanceManager </span><span class="s2">= </span><span class="s0">new </span><span class="s1">AttendanceManager</span><span class="s2">();</span>
+    <span class="s1">GradeManager gradeManager </span><span class="s2">= </span><span class="s0">new </span><span class="s1">GradeManager</span><span class="s2">();</span>
+
+    <span class="s1">JTextField thresholdField </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JTextField</span><span class="s2">(</span><span class="s3">&quot;75&quot;</span><span class="s2">, </span><span class="s4">5</span><span class="s2">);</span>
+    <span class="s1">JComboBox</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">semesterBox </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JComboBox</span><span class="s2">&lt;&gt;(</span><span class="s0">new </span><span class="s1">Integer</span><span class="s2">[]{</span><span class="s4">1</span><span class="s2">, </span><span class="s4">2</span><span class="s2">, </span><span class="s4">3</span><span class="s2">, </span><span class="s4">4</span><span class="s2">, </span><span class="s4">5</span><span class="s2">, </span><span class="s4">6</span><span class="s2">, </span><span class="s4">7</span><span class="s2">, </span><span class="s4">8</span><span class="s2">});</span>
+    <span class="s1">JLabel alertLabel </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JLabel</span><span class="s2">(</span><span class="s3">&quot;Status: Normal&quot;</span><span class="s2">);</span>
+
+    <span class="s1">DefaultTableModel model </span><span class="s2">= </span><span class="s0">new </span><span class="s1">DefaultTableModel</span><span class="s2">(</span>
+            <span class="s0">new </span><span class="s1">String</span><span class="s2">[]{</span><span class="s3">&quot;Category&quot;</span><span class="s2">, </span><span class="s3">&quot;Subject&quot;</span><span class="s2">, </span><span class="s3">&quot;Score / Attendance&quot;</span><span class="s2">, </span><span class="s3">&quot;Status&quot;</span><span class="s2">}, </span><span class="s4">0</span><span class="s2">) {</span>
+        <span class="s0">public boolean </span><span class="s1">isCellEditable</span><span class="s2">(</span><span class="s0">int </span><span class="s1">row</span><span class="s2">, </span><span class="s0">int </span><span class="s1">column</span><span class="s2">) {</span>
+            <span class="s0">return false</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">};</span>
+
+    <span class="s1">JTable table </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JTable</span><span class="s2">(</span><span class="s1">model</span><span class="s2">);</span>
+
+    <span class="s0">public </span><span class="s1">ParentGUI</span><span class="s2">() {</span>
+        <span class="s1">setLayout</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BorderLayout</span><span class="s2">(</span><span class="s4">10</span><span class="s2">, </span><span class="s4">10</span><span class="s2">));</span>
+        <span class="s1">setBorder</span><span class="s2">(</span><span class="s1">BorderFactory</span><span class="s2">.</span><span class="s1">createEmptyBorder</span><span class="s2">(</span><span class="s4">10</span><span class="s2">, </span><span class="s4">10</span><span class="s2">, </span><span class="s4">10</span><span class="s2">, </span><span class="s4">10</span><span class="s2">));</span>
+
+        <span class="s1">JLabel title </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JLabel</span><span class="s2">(</span><span class="s3">&quot;Parent Module&quot;</span><span class="s2">, </span><span class="s1">JLabel</span><span class="s2">.</span><span class="s1">CENTER</span><span class="s2">);</span>
+
+        <span class="s1">JPanel topPanel </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JPanel</span><span class="s2">(</span><span class="s0">new </span><span class="s1">FlowLayout</span><span class="s2">(</span><span class="s1">FlowLayout</span><span class="s2">.</span><span class="s1">LEFT</span><span class="s2">));</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">JLabel</span><span class="s2">(</span><span class="s3">&quot;Min Attendance %:&quot;</span><span class="s2">));</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">thresholdField</span><span class="s2">);</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">JLabel</span><span class="s2">(</span><span class="s3">&quot;Semester:&quot;</span><span class="s2">));</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">semesterBox</span><span class="s2">);</span>
+
+        <span class="s1">JButton refreshButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JButton</span><span class="s2">(</span><span class="s3">&quot;Refresh&quot;</span><span class="s2">);</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">refreshButton</span><span class="s2">);</span>
+        <span class="s1">topPanel</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">alertLabel</span><span class="s2">);</span>
+
+        <span class="s1">JPanel north </span><span class="s2">= </span><span class="s0">new </span><span class="s1">JPanel</span><span class="s2">(</span><span class="s0">new </span><span class="s1">BorderLayout</span><span class="s2">());</span>
+        <span class="s1">north</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">title</span><span class="s2">, </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">NORTH</span><span class="s2">);</span>
+        <span class="s1">north</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">topPanel</span><span class="s2">, </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">CENTER</span><span class="s2">);</span>
+
+        <span class="s1">add</span><span class="s2">(</span><span class="s1">north</span><span class="s2">, </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">NORTH</span><span class="s2">);</span>
+        <span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">JScrollPane</span><span class="s2">(</span><span class="s1">table</span><span class="s2">), </span><span class="s1">BorderLayout</span><span class="s2">.</span><span class="s1">CENTER</span><span class="s2">);</span>
+
+        <span class="s1">refreshButton</span><span class="s2">.</span><span class="s1">addActionListener</span><span class="s2">(</span><span class="s1">e -&gt; loadData</span><span class="s2">());</span>
+        <span class="s1">semesterBox</span><span class="s2">.</span><span class="s1">addActionListener</span><span class="s2">(</span><span class="s1">e -&gt; loadData</span><span class="s2">());</span>
+
+        <span class="s1">loadData</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">void </span><span class="s1">loadData</span><span class="s2">() {</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">setRowCount</span><span class="s2">(</span><span class="s4">0</span><span class="s2">);</span>
+
+        <span class="s0">int </span><span class="s1">threshold </span><span class="s2">= </span><span class="s4">75</span><span class="s2">;</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">threshold </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">thresholdField</span><span class="s2">.</span><span class="s1">getText</span><span class="s2">().</span><span class="s1">trim</span><span class="s2">());</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">) {</span>
+            <span class="s1">threshold </span><span class="s2">= </span><span class="s4">75</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">int </span><span class="s1">sem </span><span class="s2">= (</span><span class="s1">Integer</span><span class="s2">) </span><span class="s1">semesterBox</span><span class="s2">.</span><span class="s1">getSelectedItem</span><span class="s2">();</span>
+        <span class="s0">boolean </span><span class="s1">alertFound </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Subject</span><span class="s2">&gt; </span><span class="s1">subjects </span><span class="s2">= </span><span class="s1">attendanceManager</span><span class="s2">.</span><span class="s1">getSubjects</span><span class="s2">();</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s1">Subject s </span><span class="s2">: </span><span class="s1">subjects</span><span class="s2">) {</span>
+                <span class="s1">String status </span><span class="s2">= </span><span class="s3">&quot;OK&quot;</span><span class="s2">;</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">s</span><span class="s2">.</span><span class="s1">getPercentage</span><span class="s2">() &lt; </span><span class="s1">threshold</span><span class="s2">) {</span>
+                    <span class="s1">status </span><span class="s2">= </span><span class="s3">&quot;Low Attendance!&quot;</span><span class="s2">;</span>
+                    <span class="s1">alertFound </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s2">}</span>
+
+                <span class="s1">model</span><span class="s2">.</span><span class="s1">addRow</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Object</span><span class="s2">[]{</span>
+                        <span class="s3">&quot;Attendance&quot;</span><span class="s2">,</span>
+                        <span class="s1">s</span><span class="s2">.</span><span class="s1">getName</span><span class="s2">(),</span>
+                        <span class="s1">s</span><span class="s2">.</span><span class="s1">getPercentage</span><span class="s2">() + </span><span class="s3">&quot;% (&quot; </span><span class="s2">+ </span><span class="s1">s</span><span class="s2">.</span><span class="s1">getAttended</span><span class="s2">() + </span><span class="s3">&quot;/&quot; </span><span class="s2">+ </span><span class="s1">s</span><span class="s2">.</span><span class="s1">getTotal</span><span class="s2">() + </span><span class="s3">&quot;)&quot;</span><span class="s2">,</span>
+                        <span class="s1">status</span>
+                <span class="s2">});</span>
+            <span class="s2">}</span>
+
+            <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Grade</span><span class="s2">&gt; </span><span class="s1">grades </span><span class="s2">= </span><span class="s1">gradeManager</span><span class="s2">.</span><span class="s1">getGrades</span><span class="s2">(</span><span class="s1">sem</span><span class="s2">);</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s1">Grade g </span><span class="s2">: </span><span class="s1">grades</span><span class="s2">) {</span>
+                <span class="s1">String status </span><span class="s2">= </span><span class="s3">&quot;Grade: &quot; </span><span class="s2">+ </span><span class="s1">g</span><span class="s2">.</span><span class="s1">getGrade</span><span class="s2">();</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">g</span><span class="s2">.</span><span class="s1">getMarks</span><span class="s2">() &lt; </span><span class="s4">60</span><span class="s2">) {</span>
+                    <span class="s1">status </span><span class="s2">+= </span><span class="s3">&quot; (Low Marks)&quot;</span><span class="s2">;</span>
+                    <span class="s1">alertFound </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+                <span class="s2">}</span>
+
+                <span class="s1">model</span><span class="s2">.</span><span class="s1">addRow</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Object</span><span class="s2">[]{</span>
+                        <span class="s3">&quot;Semester &quot; </span><span class="s2">+ </span><span class="s1">sem </span><span class="s2">+ </span><span class="s3">&quot; Grade&quot;</span><span class="s2">,</span>
+                        <span class="s1">g</span><span class="s2">.</span><span class="s1">getSubject</span><span class="s2">(),</span>
+                        <span class="s1">g</span><span class="s2">.</span><span class="s1">getMarks</span><span class="s2">() + </span><span class="s3">&quot; Marks&quot;</span><span class="s2">,</span>
+                        <span class="s1">status</span>
+                <span class="s2">});</span>
+            <span class="s2">}</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">alertFound</span><span class="s2">) {</span>
+                <span class="s1">alertLabel</span><span class="s2">.</span><span class="s1">setForeground</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">RED</span><span class="s2">);</span>
+                <span class="s1">alertLabel</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s3">&quot;Status: Warning - Check Low Records!&quot;</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">alertLabel</span><span class="s2">.</span><span class="s1">setForeground</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">DARK_GRAY</span><span class="s2">);</span>
+                <span class="s1">alertLabel</span><span class="s2">.</span><span class="s1">setText</span><span class="s2">(</span><span class="s3">&quot;Status: All Good&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">SQLException e</span><span class="s2">) {</span>
+            <span class="s1">JOptionPane</span><span class="s2">.</span><span class="s1">showMessageDialog</span><span class="s2">(</span><span class="s0">this</span><span class="s2">, </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
